@@ -1,4 +1,8 @@
-const {app, BrowserWindow, Menu} = require('electron');
+const {app, BrowserWindow, Menu, ipcMain} = require('electron');
+
+const Badge = require('electron-windows-badge')
+
+const ipcRenderer = ipcMain
 
 const template = [
     {
@@ -27,7 +31,7 @@ const menu = Menu.buildFromTemplate(template)
 function createWindow () {
 	
   // Create the browser window.
-  mainWindow = new BrowserWindow({width: 1000, height: 800, frame: false})
+  mainWindow = new BrowserWindow({width: 1000, height: 550, frame: false})
 
   // and load the index.html of the app.
   mainWindow.loadURL(`file://${__dirname}/index.html`)
@@ -37,7 +41,24 @@ function createWindow () {
 
     Menu.setApplicationMenu(menu);
     
-    mainWindow.setProgressBar(0.37);
+    mainWindow.setProgressBar(2);
+
+    const badgeOptions = {
+      fontColor: "white",
+      font: "24px sans-serif",
+      color: "red",
+      fit: true,
+      decimals: 0,
+      radius: 8
+    }
+
+    new Badge(mainWindow, badgeOptions);
+
+    //ipcRenderer.sendSync('update-badge', 1);
+
+    //ipcMain.sendSync('update-badge', 3);
+
+
 
   // Emitted when the window is closed.
   mainWindow.on('closed', function () {
